@@ -11,11 +11,11 @@ class Ray {
     }
 
     moveTo(x, y) {
-        this.pos = createVector(x, y);
+        this.pos.set(x, y);
     }
 
     lookAt(x, y) {
-        new_dir = createVector(x - this.pos.x, y - this.pos.y);
+        let new_dir = createVector(x - this.pos.x, y - this.pos.y);
         new_dir.normalize();
         this.dir = new_dir;
     }

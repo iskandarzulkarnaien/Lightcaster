@@ -14,13 +14,15 @@ class LightSource {
     }
 
     moveTo(x, y) {
-        this.pos = createVector(x, y);
+        this.pos.set(x, y);
+        this.generateRays();
     }
 
     lookAt(x, y) {
-        new_dir = createVector(x - this.pos.x, y - this.pos.y);
+        let new_dir = createVector(x - this.pos.x, y - this.pos.y);
         new_dir.normalize();
         this.dir = new_dir;
+        this.generateRays();
     }
 
     updateFov(angle) {
@@ -37,7 +39,7 @@ class LightSource {
     generateRays() {
         this.rays = [];
         for (let a = -this.fov / 2; a < this.fov / 2; a += 1) {
-            let ray_dir = p5.Vector.fromAngle(radians(a) + this.dir.angleBetween(createVector(1, 0)));
+            let ray_dir = p5.Vector.fromAngle(radians(a) - this.dir.angleBetween(createVector(1, 0)));
             this.rays.push(new Ray(this.pos.x, this.pos.y, ray_dir.x, ray_dir.y));        
         }
     }

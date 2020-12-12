@@ -1,17 +1,19 @@
 CANVAS_WIDTH = 800;
 CANVAS_HEIGHT = 800;
 
+let objects;
+let light_sources;
+
 function setup() {
     createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    objects = createObjects();
+    light_sources = createLightSources();
 }
 
 function draw() {
     background(0);
 
-    objects = createObjects();
     drawAllObjects(objects);
-
-    light_sources = createLightSources();
     castAllLightSources(light_sources, objects);
 }
 
@@ -59,8 +61,7 @@ function createLightSources() {
     // // ray.moveTo(mouseX, mouseY);
     // light_sources.push(ray);
 
-    let candle = new LightSource(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 100, 1, -1, 30, 1);
-    // candle.show();
+    let candle = new LightSource(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 100, 1, 1, 30, 1);
     light_sources.push(candle);
 
     return light_sources;
