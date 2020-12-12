@@ -19,9 +19,9 @@ function draw() {
 function createObjects() {
     objects = [];
 
-    let wall = new LineSegment(CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 + 100,
+    let mirror = new Mirror(CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 + 100,
         CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 - 100);
-    objects.push(wall);
+    objects.push(mirror);
 
     let boundary_top = new LineSegment(0, 0, CANVAS_WIDTH, 0);
     objects.push(boundary_top);
@@ -47,9 +47,9 @@ function drawAllObjects(objects) {
 function createLightSources() {
     light_sources = [];
 
-    let ray = new Ray(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 1, 0);
-    // ray.moveTo(mouseX, mouseY);
-    light_sources.push(ray);
+    // let ray = new Ray(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 1, 0);
+    // // ray.moveTo(mouseX, mouseY);
+    // light_sources.push(ray);
 
     let candle = new LightSource(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 100, 1, -1, 30, 1);
     // candle.show();

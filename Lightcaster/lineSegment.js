@@ -2,6 +2,11 @@ class LineSegment {
     constructor(start_x, start_y, end_x, end_y) {
         this.start_point = createVector(start_x, start_y);
         this.end_point = createVector(end_x, end_y);
+        
+        let baseDelta = p5.Vector.sub(this.end_point, this.start_point);
+        this.normal = createVector(-baseDelta.y, baseDelta.x);
+
+        this.reflective = false;
     }
 
     findHit(ray) {
