@@ -19,20 +19,28 @@ function draw() {
 function createObjects() {
     objects = [];
 
+    let glass = new UnreflectiveGlass(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50,
+        CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 - 100);
+    objects.push(glass);
+
+    // let mirror = new Mirror(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50,
+    //     CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 - 100);
+    // objects.push(mirror);
+
     let mirror = new Mirror(CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 + 100,
         CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 - 100);
     objects.push(mirror);
 
-    let boundary_top = new LineSegment(0, 0, CANVAS_WIDTH, 0);
+    let boundary_top = new LineObject(0, 0, CANVAS_WIDTH, 0);
     objects.push(boundary_top);
     
-    let boundary_right = new LineSegment(CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let boundary_right = new LineObject(CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     objects.push(boundary_right);
 
-    let boundary_bottom = new LineSegment(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let boundary_bottom = new LineObject(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
     objects.push(boundary_bottom);
 
-    let boundary_left = new LineSegment(0, 0, 0, CANVAS_HEIGHT);
+    let boundary_left = new LineObject(0, 0, 0, CANVAS_HEIGHT);
     objects.push(boundary_left);
 
     return objects;
