@@ -1,11 +1,9 @@
-CANVAS_WIDTH = 800;
-CANVAS_HEIGHT = 800;
-
 let objects;
 let light_sources;
 
 function setup() {
-    createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+    canvas_length = displayWidth < displayHeight ? displayWidth : displayHeight
+    createCanvas(canvas_length * 3/4, canvas_length * 3/4);
     objects = createObjects();
     light_sources = createStationaryLightSources();
 }
@@ -15,8 +13,6 @@ function draw() {
 
     drawAllObjects(objects);
     castAllStationaryLightSources(light_sources, objects);
-
-
 }
 
 // Make objects in here, then push them into the array
@@ -24,25 +20,25 @@ function createObjects() {
     objects = [];
 
     // Bounding Box of Canvas
-    let boundary_top = new LineObject(0, 0, CANVAS_WIDTH, 0);
+    let boundary_top = new LineObject(0, 0, width, 0);
     objects.push(boundary_top);
     
-    let boundary_right = new LineObject(CANVAS_WIDTH, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let boundary_right = new LineObject(width, 0, width, height);
     objects.push(boundary_right);
 
-    let boundary_bottom = new LineObject(0, CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS_HEIGHT);
+    let boundary_bottom = new LineObject(0, height, width, height);
     objects.push(boundary_bottom);
 
-    let boundary_left = new LineObject(0, 0, 0, CANVAS_HEIGHT);
+    let boundary_left = new LineObject(0, 0, 0, height);
     objects.push(boundary_left);
 
     // Other Surfaces
 
     for (let i = 0; i < 9; i++) {
-        let x1= random(CANVAS_WIDTH);
-        let y1 = random(CANVAS_HEIGHT);
-        let x2 = random(CANVAS_WIDTH);
-        let y2 = random(CANVAS_HEIGHT);
+        let x1= random(width);
+        let y1 = random(height);
+        let x2 = random(width);
+        let y2 = random(height);
         
         let random_line = random([
             (x1, y1, x2, y2) => new LineObject(x1, y1, x2, y2),
@@ -52,12 +48,12 @@ function createObjects() {
         objects.push(random_line);
     }
 
-    // let glass = new UnreflectiveGlass(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 50,
-    //     CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 - 100);
+    // let glass = new UnreflectiveGlass(width / 2, height / 2 + 50,
+    //     width / 2 + 50, height / 2 - 100);
     // objects.push(glass);
 
-    // let mirror = new Mirror(CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 + 100,
-    //     CANVAS_WIDTH / 2 + 50, CANVAS_HEIGHT / 2 - 100);
+    // let mirror = new Mirror(width / 2 + 50, height / 2 + 100,
+    //     width / 2 + 50, height / 2 - 100);
     // objects.push(mirror);
 
     return objects;
@@ -72,11 +68,11 @@ function drawAllObjects(objects) {
 function createStationaryLightSources() {
     light_sources = [];
 
-    // let ray = new Ray(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2, 1, 0);
+    // let ray = new Ray(width / 2, height / 2, 1, 0);
     // // ray.moveTo(mouseX, mouseY);
     // light_sources.push(ray);
 
-    // let torch = new LightSource(CANVAS_WIDTH / 2 - 100, CANVAS_HEIGHT / 2 - 100, 1, 1, 30, 1);
+    // let torch = new LightSource(width / 2 - 100, height / 2 - 100, 1, 1, 30, 1);
     let torch = new LightSource(0, 0, 1, 1, 30, 1);
     light_sources.push(torch);
 
