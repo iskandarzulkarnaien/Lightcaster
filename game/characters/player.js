@@ -88,12 +88,6 @@ class Player {
         // keyPressed(this);
     }
 
-    cast(objects) {
-        for (let ray of this.rays) {
-            ray.cast(objects);
-        }
-    }
-
     moveTo(point) {
         let x = point.x;
         x = x < 0 ? 0 : x;
