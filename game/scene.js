@@ -1,18 +1,27 @@
 let objects;
 let light_sources;
+let player;
+let follow_mouse;
 
 function setup() {
     canvas_length = displayWidth < displayHeight ? displayWidth : displayHeight
     createCanvas(canvas_length * 3/4, canvas_length * 3/4);
+
     objects = createObjects();
     light_sources = createStationaryLightSources();
+
+    player = new PlayerSource(width/2, height/2)
 }
 
 function draw() {
     background(0);
 
     drawAllObjects(objects);
-    castAllStationaryLightSources(light_sources, objects);
+    // castAllStationaryLightSources(light_sources, objects);
+
+    player.allowControl(follow_mouse);
+    player.cast(objects)
+    player.show();
 }
 
 // Make objects in here, then push them into the array

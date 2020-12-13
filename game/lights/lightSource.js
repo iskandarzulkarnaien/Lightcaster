@@ -4,7 +4,7 @@ class LightSource {
         this.dir = createVector(dir_x, dir_y);
         this.dir.normalize();
         this.fov = fov;
-        this.intensity = intensity;
+        this.intensity = intensity; // TODO: Change number of rays based on intensity
         if (!shape) {
             this.shape = () => ellipse(this.pos.x, this.pos.y, 8);
         } else {
@@ -13,13 +13,13 @@ class LightSource {
         this.generateRays();
     }
 
-    moveTo(x, y) {
-        this.pos.set(x, y);
+    moveTo(point) {
+        this.pos = point;
         this.generateRays();
     }
 
-    lookAt(x, y) {
-        let new_dir = createVector(x - this.pos.x, y - this.pos.y);
+    lookAt(point) {
+        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
         new_dir.normalize();
         this.dir = new_dir;
         this.generateRays();
