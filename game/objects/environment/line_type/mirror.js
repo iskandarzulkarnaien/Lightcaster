@@ -6,7 +6,7 @@ class Mirror extends LineObject {
 
     show() {
         push();
-            stroke(255, 200);
+            stroke('yellow');
             strokeWeight(3);
             line(this.start_point.x, this.start_point.y, this.end_point.x, this.end_point.y);
         pop();
