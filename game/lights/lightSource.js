@@ -1,7 +1,7 @@
 class LightSource {
-    constructor(pos_x, pos_y, dir_x, dir_y, fov, intensity, shape=null) {
-        this.pos = createVector(pos_x, pos_y);
-        this.dir = createVector(dir_x, dir_y);
+    constructor(posX, posY, dirX, dirY, fov, intensity, shape=null) {
+        this.pos = createVector(posX, posY);
+        this.dir = createVector(dirX, dirY);
         this.dir.normalize();
         this.fov = fov;
         this.intensity = intensity; // TODO: Change number of rays based on intensity
@@ -19,9 +19,9 @@ class LightSource {
     }
 
     lookAt(point) {
-        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
-        new_dir.normalize();
-        this.dir = new_dir;
+        let newDir = createVector(point.x - this.pos.x, point.y - this.pos.y);
+        newDir.normalize();
+        this.dir = newDir;
         this.generateRays();
     }
 
@@ -39,8 +39,8 @@ class LightSource {
     generateRays() {
         this.rays = [];
         for (let a = -this.fov / 2; a < this.fov / 2; a += 1) {
-            let ray_dir = p5.Vector.fromAngle(radians(a) - this.dir.angleBetween(createVector(1, 0)));
-            this.rays.push(new Ray(this.pos.x, this.pos.y, ray_dir.x, ray_dir.y));        
+            let rayDir = p5.Vector.fromAngle(radians(a) - this.dir.angleBetween(createVector(1, 0)));
+            this.rays.push(new Ray(this.pos.x, this.pos.y, rayDir.x, rayDir.y));        
         }
     }
 
