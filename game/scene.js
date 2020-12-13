@@ -1,4 +1,8 @@
+// Objects requiring pre-loading
 let background_img;
+let player_img;
+
+// Other Objects
 let objects;
 let light_sources;
 let player;
@@ -6,16 +10,22 @@ let follow_mouse;
 
 function preload() {
     background_img = preload_background();
+    player_img = preload_player();
+    player_img.loadPixels();
 }
 
 function setup() {
-    canvas_length = displayWidth < displayHeight ? displayWidth : displayHeight;
-    createCanvas(canvas_length * 3/4, canvas_length * 3/4);
+    // Scaling Constants
+    const CANVAS_LENGTH = displayWidth < displayHeight ? displayWidth : displayHeight;
+    const PLAYER_SIZE = Math.floor(CANVAS_LENGTH * 0.025);
+
+    createCanvas(CANVAS_LENGTH * 3/4, CANVAS_LENGTH * 3/4);
 
     objects = createObjects();
     light_sources = createStationaryLightSources();
 
-    player = new PlayerSource(width/2, height/2);
+    player_img.resize(0, PLAYER_SIZE);
+    player = PlayerSource.createPlayer(width/2, height/2, player_img);
 }
 
 function draw() {
@@ -34,6 +44,13 @@ function preload_background(background_id=null) {
         background_id = Math.floor(random(1, 10));
     }
     return loadImage(`assets/animated_backgrounds/space${background_id}_4-frames.gif`);
+}
+
+function preload_player(ship_id=2) {
+    if (!ship_id) {
+        ship_id = Math.floor(random(1, 7));
+    }
+    return loadImage(`assets/models/player/Ship${ship_id}.png`);
 }
 
 function display_background() {
