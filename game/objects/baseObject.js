@@ -6,6 +6,7 @@ class BaseObject {
 
     constructor() {
         this.optical_properties = [];
+        // this.intersectable = null;
     }
 
     addOpticalProperty(property) {
