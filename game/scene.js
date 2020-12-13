@@ -1,6 +1,7 @@
 // Objects requiring pre-loading
 let background_img;
-let player_img;
+let player_sprite;
+let enemy_sprites;
 
 // Other Objects
 let objects;
@@ -11,18 +12,29 @@ let follow_mouse;
 // Game Related Data
 let game_tick = 0;
 
+// Main Functions Section
 function preload() {
+    const NUM_ENEMIES = 9;
+
     background_img = preload_background();
-    player_img = preload_player();
-    player_img.loadPixels();
+
+    player_sprite = preload_player();
+    player_sprite.loadPixels();
+
+    enemy_sprites = preload_enemies(NUM_ENEMIES);
+    for (let enemy_sprite of enemy_sprites) {
+        enemy_sprite.loadPixels();
+    }
 }
 
 function setup() {
     // Scaling Constants
     const CANVAS_LENGTH = displayWidth < displayHeight ? displayWidth : displayHeight;
     const BACKGROUND_ANIMATION_SPEED = 750; // In milliseconds
-    const PLAYER_SIZE = Math.floor(CANVAS_LENGTH * 0.025);
     const TARGET_FRAMERATE = 60;
+
+    const PLAYER_SIZE = Math.floor(CANVAS_LENGTH * 0.025);
+    const ENEMY_SIZE = Math.floor(CANVAS_LENGTH * 0.030);
 
     // Locks the framerate to the target framerate, game ticks are based on number of elapsed frames
     frameRate(TARGET_FRAMERATE);
@@ -34,11 +46,20 @@ function setup() {
     objects = createObjects();
     light_sources = createStationaryLightSources();
 
-    player_img.resize(0, PLAYER_SIZE);
-    player = Player.createPlayer(width/2, height/2, player_img);
+    // Place these into their own functions
+    player_sprite.resize(0, PLAYER_SIZE);
+    player = Player.createPlayer(width/2, height/2, player_sprite);
+    objects.push(player);
 
-    enemy = Enemy.createEnemy(width/4, height/4, player_img);
-    objects.push(enemy);
+    let bounding_offset = 100;
+    for (let enemySprite of enemyShipSprites) {
+        let x = random(bounding_offset, width - bounding_offset);
+        let y = random(bounding_offset, height - bounding_offset);
+
+        enemySprite.resize(0, ENEMY_SIZE);
+        enemy = Enemy.createEnemy(x, y, enemySprite);
+        objects.push(enemy);
+    }
 }
 
 function draw() {
@@ -57,6 +78,9 @@ function draw() {
     player.show();
 }
 
+// Helper Functions Section
+
+// Preload Function
 function preload_background(background_id=null) {
     if (!background_id) {
         background_id = Math.floor(random(1, 10));
@@ -71,10 +95,29 @@ function preload_player(ship_id=2) {
     return loadImage(`assets/models/player/Ship${ship_id}.png`);
 }
 
+function preload_enemies(numEnemies, enemyShipId=null) {
+    enemyShipSprites = [];
+    if (!enemyShipId) {
+        enemyShipId = Math.floor(random(1, 7));
+    }
+    for (let i = 0; i < numEnemies; i++) {
+        enemyShipSprites.push(loadImage(`assets/models/player/Ship${enemyShipId}.png`));
+    }
+    return enemyShipSprites;
+}
+
+// Display Functions
 function display_background() {
     background(background_img)
 }
 
+function drawAllObjects(objects) {
+    for (let object of objects) {
+        object.show();
+    }
+}
+
+// Environment Creation Functions
 // Make objects in here, then push them into the array
 function createObjects() {
     objects = [];
@@ -120,12 +163,7 @@ function createObjects() {
     return objects;
 }
 
-function drawAllObjects(objects) {
-    for (let object of objects) {
-        object.show();
-    }
-}
-
+// Light Related Functions
 function createStationaryLightSources() {
     light_sources = [];
 
