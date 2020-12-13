@@ -35,10 +35,11 @@ function createObjects() {
     // Other Surfaces
 
     for (let i = 0; i < 9; i++) {
-        let x1= random(width);
-        let y1 = random(height);
-        let x2 = random(width);
-        let y2 = random(height);
+        let bounding_offset = 50;
+        let x1= random(bounding_offset, width - bounding_offset);
+        let y1 = random(bounding_offset, height - bounding_offset);
+        let x2 = random(bounding_offset, width - bounding_offset);
+        let y2 = random(bounding_offset, height - bounding_offset);
         
         let random_line = random([
             (x1, y1, x2, y2) => new LineObject(x1, y1, x2, y2),
