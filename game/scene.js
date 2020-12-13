@@ -36,6 +36,9 @@ function setup() {
 
     player_img.resize(0, PLAYER_SIZE);
     player = Player.createPlayer(width/2, height/2, player_img);
+
+    enemy = Enemy.createEnemy(width/4, height/4, player_img);
+    objects.push(enemy);
 }
 
 function draw() {
