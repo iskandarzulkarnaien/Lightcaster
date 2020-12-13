@@ -17,9 +17,12 @@ function preload() {
 function setup() {
     // Scaling Constants
     const CANVAS_LENGTH = displayWidth < displayHeight ? displayWidth : displayHeight;
+    const BACKGROUND_ANIMATION_SPEED = 750; // In milliseconds
     const PLAYER_SIZE = Math.floor(CANVAS_LENGTH * 0.025);
 
     createCanvas(CANVAS_LENGTH * 3/4, CANVAS_LENGTH * 3/4);
+
+    background_img.delay(BACKGROUND_ANIMATION_SPEED);
 
     objects = createObjects();
     light_sources = createStationaryLightSources();
