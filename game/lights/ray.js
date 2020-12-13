@@ -10,12 +10,12 @@ class Ray {
         this.dir.normalize();
     }
 
-    moveTo(x, y) {
-        this.pos.set(x, y);
+    moveTo(point) {
+        this.pos = point;
     }
 
-    lookAt(x, y) {
-        let new_dir = createVector(x - this.pos.x, y - this.pos.y);
+    lookAt(point) {
+        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
         new_dir.normalize();
         this.dir = new_dir;
     }
@@ -56,7 +56,8 @@ class Ray {
     }
 
     handle_reflective(nearest_hit, hit_object) {
-        let reflected_dir = this.dir.reflect(hit_object.normal)
+        // let reflected_dir = this.dir.reflect(hit_object.normal)
+        let reflected_dir = this.dir.copy().reflect(hit_object.normal)
         let reflected_ray = new Ray(nearest_hit.x, nearest_hit.y, reflected_dir.x, reflected_dir.y)
         reflected_ray.cast(objects)
     }

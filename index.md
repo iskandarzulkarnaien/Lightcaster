@@ -25,6 +25,7 @@
   <!-- Light Sources -->
   <script src="game/lights/ray.js"></script>
   <script src="game/lights/lightSource.js"></script>
+  <script src="game/lights/playerSource.js"></script>
 
 </head>
 
