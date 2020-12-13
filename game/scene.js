@@ -1,20 +1,25 @@
+let background_img;
 let objects;
 let light_sources;
 let player;
 let follow_mouse;
 
+function preload() {
+    background_img = preload_background();
+}
+
 function setup() {
-    canvas_length = displayWidth < displayHeight ? displayWidth : displayHeight
+    canvas_length = displayWidth < displayHeight ? displayWidth : displayHeight;
     createCanvas(canvas_length * 3/4, canvas_length * 3/4);
 
     objects = createObjects();
     light_sources = createStationaryLightSources();
 
-    player = new PlayerSource(width/2, height/2)
+    player = new PlayerSource(width/2, height/2);
 }
 
 function draw() {
-    background(0);
+    display_background();
 
     drawAllObjects(objects);
     // castAllStationaryLightSources(light_sources, objects);
@@ -24,21 +29,32 @@ function draw() {
     player.show();
 }
 
+function preload_background(background_id=null) {
+    if (!background_id) {
+        background_id = Math.floor(random(1, 10));
+    }
+    return loadImage(`assets/animated_backgrounds/space${background_id}_4-frames.gif`);
+}
+
+function display_background() {
+    background(background_img)
+}
+
 // Make objects in here, then push them into the array
 function createObjects() {
     objects = [];
 
     // Bounding Box of Canvas
-    let boundary_top = new LineObject(0, 0, width, 0);
+    let boundary_top = new Boundary(0, 0, width, 0);
     objects.push(boundary_top);
     
-    let boundary_right = new LineObject(width, 0, width, height);
+    let boundary_right = new Boundary(width, 0, width, height);
     objects.push(boundary_right);
 
-    let boundary_bottom = new LineObject(0, height, width, height);
+    let boundary_bottom = new Boundary(0, height, width, height);
     objects.push(boundary_bottom);
 
-    let boundary_left = new LineObject(0, 0, 0, height);
+    let boundary_left = new Boundary(0, 0, 0, height);
     objects.push(boundary_left);
 
     // Other Surfaces
