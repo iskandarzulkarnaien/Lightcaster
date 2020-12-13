@@ -1,13 +1,16 @@
-class PlayerSource extends LightSource {
-    constructor(pos_x, pos_y, dir_x=1, dir_y=0, fov=30, intensity=null, sprite=null) {
-        super(pos_x, pos_y, dir_x, dir_y, fov, intensity, sprite);
+class Player {
+    constructor(pos_x, pos_y, dir_x=1, dir_y=0, sprite) {
+        this.pos = createVector(pos_x, pos_y);
+        this.dir = createVector(dir_x, dir_y);
+        this.dir.normalize();
+        this.sprite = sprite;
     }
 
     static createPlayer(pos_x, pos_y, sprite) {
-        return new PlayerSource(pos_x, pos_y, 1, 0, 30, null, sprite);
+        return new Player(pos_x, pos_y, 1, 0, sprite);
     }
 
-    allowControl(follow_mouse) {
+    allowControl(follow_mouse, objects) {
         this.moveForwardsBackwards();
 
         if (follow_mouse) {
@@ -16,6 +19,8 @@ class PlayerSource extends LightSource {
         } else {
             this.lookLeftRight();
         }
+        
+        this.laserControl(objects);
     }
 
     moveForwardsBackwards(speed=50) {
@@ -63,7 +68,29 @@ class PlayerSource extends LightSource {
 
         if (new_dir) {
             let new_look_at_pt = createVector(new_dir.x + this.pos.x, new_dir.y + this.pos.y)
-            super.lookAt(new_look_at_pt)
+            this.lookAt(new_look_at_pt)
+        }
+    }
+
+    laserControl(objects) {
+        // 32 is 'SPACE' key.
+        if (keyIsDown(32) || mouseIsPressed) {
+            let laser = Ray.createPlayerRay(player);
+            laser.cast(objects);
+        }
+
+        // function keyPressed(player) {
+        //     if (keyCode == 32) {
+        //         let laser = Ray.createPlayerRay(player);
+        //         laser.cast(objects);
+        //     }
+        // }
+        // keyPressed(this);
+    }
+
+    cast(objects) {
+        for (let ray of this.rays) {
+            ray.cast(objects);
         }
     }
 
@@ -76,22 +103,22 @@ class PlayerSource extends LightSource {
         y = y < 0 ? 0 : y;
         y = y > height ? height : y;
 
-        super.moveTo(createVector(x, y));
+        this.pos = createVector(x, y);
     }
 
-    // Use slider for this?
-    updateFov() {
-        // let fov = get_fov_from_player
-        // super.updateFov(get_fov_from_player)
+    lookAt(point) {
+        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
+        new_dir.normalize();
+        this.dir = new_dir;
     }
 
     show() {
         push();
             translate(this.pos.x, this.pos.y);
             rotate(-this.dir.angleBetween(createVector(1, 0)));
-            translate(-this.shape.width/2, -this.shape.height/2);
+            translate(-this.sprite.width/2, -this.sprite.height/2);
             translate(-this.pos.x, -this.pos.y);
-            image(this.shape, this.pos.x, this.pos.y);
+            image(this.sprite, this.pos.x, this.pos.y);
         pop();
     }
 }

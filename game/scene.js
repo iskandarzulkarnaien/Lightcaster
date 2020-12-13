@@ -28,7 +28,7 @@ function setup() {
     light_sources = createStationaryLightSources();
 
     player_img.resize(0, PLAYER_SIZE);
-    player = PlayerSource.createPlayer(width/2, height/2, player_img);
+    player = Player.createPlayer(width/2, height/2, player_img);
 }
 
 function draw() {
@@ -37,8 +37,7 @@ function draw() {
     drawAllObjects(objects);
     // castAllStationaryLightSources(light_sources, objects);
 
-    player.allowControl(follow_mouse);
-    player.cast(objects)
+    player.allowControl(follow_mouse, objects);
     player.show();
 }
 
