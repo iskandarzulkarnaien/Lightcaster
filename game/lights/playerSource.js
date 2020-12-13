@@ -3,6 +3,10 @@ class PlayerSource extends LightSource {
         super(pos_x, pos_y, dir_x, dir_y, fov, intensity, sprite);
     }
 
+    static createPlayer(pos_x, pos_y, sprite) {
+        return new PlayerSource(pos_x, pos_y, 1, 0, 30, null, sprite);
+    }
+
     allowControl(follow_mouse) {
         this.moveForwardsBackwards();
 
@@ -79,5 +83,15 @@ class PlayerSource extends LightSource {
     updateFov() {
         // let fov = get_fov_from_player
         // super.updateFov(get_fov_from_player)
+    }
+
+    show() {
+        push();
+            translate(this.pos.x, this.pos.y);
+            rotate(-this.dir.angleBetween(createVector(1, 0)));
+            translate(-this.shape.width/2, -this.shape.height/2);
+            translate(-this.pos.x, -this.pos.y);
+            image(this.shape, this.pos.x, this.pos.y);
+        pop();
     }
 }
