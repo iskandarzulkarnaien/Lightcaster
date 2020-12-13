@@ -7,6 +7,7 @@ let enemySprites;
 let objects;
 let lightSources;
 let player;
+let enemies;
 let followMouse;
 
 // Game Related Data
@@ -52,6 +53,7 @@ function setup() {
     objects.push(player);
 
     let boundingOffset = 100;
+    enemies = [];
     for (let enemySprite of enemyShipSprites) {
         let x = random(boundingOffset, width - boundingOffset);
         let y = random(boundingOffset, height - boundingOffset);
@@ -59,6 +61,7 @@ function setup() {
         enemySprite.resize(0, ENEMY_SIZE);
         enemy = Enemy.createEnemy(x, y, enemySprite);
         objects.push(enemy);
+        enemies.push(enemy)
     }
 }
 
@@ -74,8 +77,13 @@ function draw() {
     drawAllObjects(objects);
     // castAllStationaryLightSources(lightSources, objects);
 
+    // TODO: Change to player.executeBehavior. It is left to allowControl for now as the player
+    // dying makes it very difficult to test
     player.allowControl(followMouse, objects);
-    player.show();
+
+    for (let enemy of enemies) {
+        enemy.executeBehaviour(player);
+    }
 }
 
 // Helper Functions Section

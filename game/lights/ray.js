@@ -44,6 +44,17 @@ class Ray {
         return new Ray(player.pos.x, player.pos.y, player.dir.x, player.dir.y, drawFunction)
     }
 
+    static createEnemyRay(enemy) {
+        const drawFunction = (ray, hitLocation) => {
+            push();
+                stroke('green');
+                strokeWeight(3)
+                line(ray.pos.x, ray.pos.y, hitLocation.x, hitLocation.y);
+            pop();
+        };
+        return new Ray(enemy.pos.x, enemy.pos.y, enemy.dir.x, enemy.dir.y, drawFunction)
+    }
+
     static createCustomRay(pos, dir, drawFunction) {
         return new Ray(pos.x, pos.y, dir.x, dir.y, drawFunction)
     }

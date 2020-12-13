@@ -6,6 +6,55 @@ class BaseCharacter extends BaseObject {
         this.dir.normalize();
         this.sprite = sprite;
         this.health = health;
+        this.actionTick = 0;
+    }
+
+    executeBehaviour() {
+        if (!this.checkHealthStatus()) {
+            return;
+        }
+        this.actionTick += 1;
+    }
+    
+    checkHealthStatus() {
+        if (this.health <= 0) {
+            return false;
+        }
+        return true;
+    } 
+
+    executeDeath() {
+        // Have this trigger animations
+        this.sprite.filter(GRAY);
+    }
+
+    receiveHit() {
+        if (!this.checkHealthStatus()) {
+            return;
+        }
+        // TODO: Implement this with proper animations
+        this.sprite.filter(INVERT);
+        this.health -= 1;
+        if (this.checkHealthStatus()) {
+            this.executeDeath();
+        }
+    }
+
+    findHit(ray, epsilon) {
+        if (!this.checkHealthStatus()) {
+            return;
+        }
+        // TODO: Re-implement with Bounding Box
+        // Approximates the ship as a line that starts from the tip to tail (It does not rotate with the ship)
+        let tail = createVector(this.pos.x - this.sprite.width/2, this.pos.y);
+        let tip = createVector(this.pos.x + this.sprite.width/2, this.pos.y);
+
+        let line = new LineObject(tail.x, tail.y, tip.x, tip.y);
+        return line.findHit(ray, epsilon);
+    }
+
+    resetActionTick() {
+        this.actionTick = 0;
     }
 
     moveTo(point) {
@@ -24,21 +73,6 @@ class BaseCharacter extends BaseObject {
         let newDir = createVector(point.x - this.pos.x, point.y - this.pos.y);
         newDir.normalize();
         this.dir = newDir;
-    }
-
-    receiveHit() {
-        // TODO: Implement this with proper animations
-        this.sprite.filter(INVERT);
-    }
-
-    findHit(ray, epsilon) {
-        // TODO: Re-implement with Bounding Box
-        // Approximates the ship as a line that starts from the tip to tail (It does not rotate with the ship)
-        let tail = createVector(this.pos.x - this.sprite.width/2, this.pos.y);
-        let tip = createVector(this.pos.x + this.sprite.width/2, this.pos.y);
-
-        let line = new LineObject(tail.x, tail.y, tip.x, tip.y);
-        return line.findHit(ray, epsilon);
     }
 
     show() {

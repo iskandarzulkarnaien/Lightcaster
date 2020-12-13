@@ -7,6 +7,14 @@ class Player extends BaseCharacter {
         return new Player(posX, posY, 1, 0, sprite);
     }
 
+    executeBehaviour(followMouse, objects) {
+        if (!this.checkHealthStatus()) {
+            return;
+        }
+        super.executeBehaviour();
+        this.allowControl(followMouse, objects);
+    }
+
     allowControl(followMouse, objects) {
         this.moveForwardsBackwards();
 
