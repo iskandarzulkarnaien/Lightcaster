@@ -17,18 +17,22 @@
   <script src="game/scene.js"></script>
 
   <!-- Objects -->
-  <!-- Base -->
   <script src="game/objects/baseObject.js"></script>
+
+  <!-- Characters -->
+  <script src="game/objects/characters/baseCharacter.js"></script>
+  <script src="game/objects/characters/player.js"></script>
+  <script src="game/objects/characters/enemy.js"></script>
+
   <!-- Line Type -->
-  <script src="game/objects/line_type/lineObject.js"></script>
-  <script src="game/objects/line_type/boundary.js"></script>
-  <script src="game/objects/line_type/unreflectiveGlass.js"></script>
-  <script src="game/objects/line_type/mirror.js"></script>
+  <script src="game/objects/environment/line_type/lineObject.js"></script>
+  <script src="game/objects/environment/line_type/boundary.js"></script>
+  <script src="game/objects/environment/line_type/unreflectiveGlass.js"></script>
+  <script src="game/objects/environment/line_type/mirror.js"></script>
 
   <!-- Light Sources -->
   <script src="game/lights/ray.js"></script>
   <script src="game/lights/lightSource.js"></script>
-  <script src="game/lights/playerSource.js"></script>
 
 </head>
 
