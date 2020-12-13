@@ -8,6 +8,9 @@ let light_sources;
 let player;
 let follow_mouse;
 
+// Game Related Data
+let game_tick = 0;
+
 function preload() {
     background_img = preload_background();
     player_img = preload_player();
@@ -19,6 +22,10 @@ function setup() {
     const CANVAS_LENGTH = displayWidth < displayHeight ? displayWidth : displayHeight;
     const BACKGROUND_ANIMATION_SPEED = 750; // In milliseconds
     const PLAYER_SIZE = Math.floor(CANVAS_LENGTH * 0.025);
+    const TARGET_FRAMERATE = 60;
+
+    // Locks the framerate to the target framerate, game ticks are based on number of elapsed frames
+    frameRate(TARGET_FRAMERATE);
 
     createCanvas(CANVAS_LENGTH * 3/4, CANVAS_LENGTH * 3/4);
 
@@ -32,6 +39,12 @@ function setup() {
 }
 
 function draw() {
+    game_tick++;
+    if (game_tick % 60 == 0) {
+        console.log(`${game_tick / 60} seconds have elapsed`);
+        console.log(`current framerate is: ${frameRate()}`);
+    }
+
     display_background();
 
     drawAllObjects(objects);
