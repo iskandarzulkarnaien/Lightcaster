@@ -68,23 +68,24 @@ class Ray {
             }
         }
         if (nearest_hit) {
-            this.draw_ray(nearest_hit);
+            this.drawRay(nearest_hit);
+            hit_object.receiveHit();
 
             if (hit_object.optical_properties.includes('reflective') && reflect_level > 0) {
-                this.handle_reflective(nearest_hit, hit_object, reflect_level);
+                this.handleReflective(nearest_hit, hit_object, reflect_level);
             }
 
             if (hit_object.optical_properties.includes('transparent')) {
-                this.handle_transparent(nearest_hit);
+                this.handleTransparent(nearest_hit);
             }
 
             if (hit_object.optical_properties.includes('translucent')) {
-                this.handle_translucent(nearest_hit);
+                this.handleTranslucent(nearest_hit);
             }
         }
     }
 
-    handle_reflective(nearest_hit, hit_object, reflect_level) {
+    handleReflective(nearest_hit, hit_object, reflect_level) {
         let reflected_dir = this.dir.copy().reflect(hit_object.normal)
 
         let reflected_ray = Ray.copy(this);
@@ -93,19 +94,19 @@ class Ray {
         reflected_ray.cast(objects, reflect_level - 1)
     }
 
-    handle_transparent(nearest_hit) {
+    handleTransparent(nearest_hit) {
         let penetrating_ray = Ray.copy(this);
         penetrating_ray.moveTo(nearest_hit);
         penetrating_ray.cast(objects);
     }
 
-    handle_translucent(nearest_hit) {
+    handleTranslucent(nearest_hit) {
         // TODO: Perform some attenuation of ray brightness
         // let penetrating_ray = new Ray(nearest_hit.x, nearest_hit.y, this.dir.x, this.dir.y);
         // penetrating_ray.cast(objects)
     }
 
-    draw_ray(hit_location) {
+    drawRay(hit_location) {
         this.draw_function(this, hit_location);
     }
 

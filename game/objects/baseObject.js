@@ -6,7 +6,6 @@ class BaseObject {
 
     constructor() {
         this.optical_properties = [];
-        // this.intersectable = null;
     }
 
     addOpticalProperty(property) {
@@ -23,6 +22,10 @@ class BaseObject {
         for (let property of properties) {
             this.addOpticalProperty(property);
         }
+    }
+
+    receiveHit() {
+        return; // Not all objects need to react when they are hit
     }
 
     findHit() {
