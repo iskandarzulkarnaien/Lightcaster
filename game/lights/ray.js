@@ -5,20 +5,51 @@ class Ray {
     SHOW_RAY_POS = false;
     RAY_POS_SIZE = 8;
 
-    constructor(pos_x, pos_y, dir_x, dir_y) {
+    constructor(pos_x, pos_y, dir_x, dir_y, draw_function=null) {
         this.pos = createVector(pos_x, pos_y);
         this.dir = createVector(dir_x, dir_y);
         this.dir.normalize();
+
+        if (!draw_function) {
+            this.draw_function = (ray, hit_location)=> {
+                push();
+                    stroke(255, 100);
+                    line(ray.pos.x, ray.pos.y, hit_location.x, hit_location.y);
+                pop();
+            };
+        } else {
+            this.draw_function = draw_function
+        }
     }
 
-    moveTo(point) {
-        this.pos = point;
+    // Possible Candidates for sub-classing
+    static createDefaultRay(pos, dir) {
+        const draw_function = (ray, hit_location)=> {
+            push();
+                stroke(255, 100);
+                line(ray.pos.x, ray.pos.y, hit_location.x, hit_location.y);
+            pop();
+        };
+        return new Ray(pos.x, pos.y, dir.x, dir.y, draw_function)
     }
 
-    lookAt(point) {
-        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
-        new_dir.normalize();
-        this.dir = new_dir;
+    static createPlayerRay(player) {
+        const draw_function = (ray, hit_location) => {
+            push();
+                stroke('red');
+                strokeWeight(3)
+                line(ray.pos.x, ray.pos.y, hit_location.x, hit_location.y);
+            pop();
+        };
+        return new Ray(player.pos.x, player.pos.y, player.dir.x, player.dir.y, draw_function)
+    }
+
+    static createCustomRay(pos, dir, draw_function) {
+        return new Ray(pos.x, pos.y, dir.x, dir.y, draw_function)
+    }
+
+    static copy(ray) {
+        return new Ray(ray.pos.x, ray.pos.y, ray.dir.x, ray.dir.y, ray.draw_function)
     }
 
     cast(objects, reflect_level=this.MAXIMUM_REFLECT_LEVEL) {
@@ -37,10 +68,7 @@ class Ray {
             }
         }
         if (nearest_hit) {
-            push();
-                stroke(255, 100);
-                line(this.pos.x, this.pos.y, nearest_hit.x, nearest_hit.y);
-            pop();
+            this.draw_ray(nearest_hit);
 
             if (hit_object.optical_properties.includes('reflective') && reflect_level > 0) {
                 this.handle_reflective(nearest_hit, hit_object, reflect_level);
@@ -57,21 +85,42 @@ class Ray {
     }
 
     handle_reflective(nearest_hit, hit_object, reflect_level) {
-        // let reflected_dir = this.dir.reflect(hit_object.normal)
         let reflected_dir = this.dir.copy().reflect(hit_object.normal)
-        let reflected_ray = new Ray(nearest_hit.x, nearest_hit.y, reflected_dir.x, reflected_dir.y)
+
+        let reflected_ray = Ray.copy(this);
+        reflected_ray.moveTo(nearest_hit);
+        reflected_ray.changeDir(reflected_dir)
         reflected_ray.cast(objects, reflect_level - 1)
     }
 
     handle_transparent(nearest_hit) {
-        let penetrating_ray = new Ray(nearest_hit.x, nearest_hit.y, this.dir.x, this.dir.y);
-        penetrating_ray.cast(objects)
+        let penetrating_ray = Ray.copy(this);
+        penetrating_ray.moveTo(nearest_hit);
+        penetrating_ray.cast(objects);
     }
 
     handle_translucent(nearest_hit) {
         // TODO: Perform some attenuation of ray brightness
         // let penetrating_ray = new Ray(nearest_hit.x, nearest_hit.y, this.dir.x, this.dir.y);
         // penetrating_ray.cast(objects)
+    }
+
+    draw_ray(hit_location) {
+        this.draw_function(this, hit_location);
+    }
+
+    moveTo(point) {
+        this.pos = point;
+    }
+
+    lookAt(point) {
+        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
+        new_dir.normalize();
+        this.dir = new_dir;
+    }
+
+    changeDir(direction) {
+        this.dir = direction;
     }
 
     show() {
