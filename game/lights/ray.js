@@ -1,8 +1,9 @@
 class Ray {
-    EPSILON = 10e-6 // To avoid epsilon problem
+    EPSILON = 10e-6; // To avoid epsilon problem
+    MAXIMUM_REFLECT_LEVEL = 7;
 
-    SHOW_RAY_POS = false
-    RAY_POS_SIZE = 8
+    SHOW_RAY_POS = false;
+    RAY_POS_SIZE = 8;
 
     constructor(pos_x, pos_y, dir_x, dir_y) {
         this.pos = createVector(pos_x, pos_y);
@@ -20,7 +21,7 @@ class Ray {
         this.dir = new_dir;
     }
 
-    cast(objects) {
+    cast(objects, reflect_level=this.MAXIMUM_REFLECT_LEVEL) {
         let nearest_hit = null;
         let hit_object = null;
         let hit_distance = Infinity;
@@ -41,8 +42,8 @@ class Ray {
                 line(this.pos.x, this.pos.y, nearest_hit.x, nearest_hit.y);
             pop();
 
-            if (hit_object.optical_properties.includes('reflective')) {
-                this.handle_reflective(nearest_hit, hit_object);
+            if (hit_object.optical_properties.includes('reflective') && reflect_level > 0) {
+                this.handle_reflective(nearest_hit, hit_object, reflect_level);
             }
 
             if (hit_object.optical_properties.includes('transparent')) {
@@ -55,11 +56,11 @@ class Ray {
         }
     }
 
-    handle_reflective(nearest_hit, hit_object) {
+    handle_reflective(nearest_hit, hit_object, reflect_level) {
         // let reflected_dir = this.dir.reflect(hit_object.normal)
         let reflected_dir = this.dir.copy().reflect(hit_object.normal)
         let reflected_ray = new Ray(nearest_hit.x, nearest_hit.y, reflected_dir.x, reflected_dir.y)
-        reflected_ray.cast(objects)
+        reflected_ray.cast(objects, reflect_level - 1)
     }
 
     handle_transparent(nearest_hit) {
