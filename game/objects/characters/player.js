@@ -1,16 +1,16 @@
 class Player extends BaseCharacter {
-    constructor(pos_x, pos_y, dir_x=1, dir_y=0, sprite, health=10) {
-        super(pos_x, pos_y, dir_x, dir_y, sprite, health)
+    constructor(posX, posY, dirX=1, dirY=0, sprite, health=10) {
+        super(posX, posY, dirX, dirY, sprite, health)
     }
 
-    static createPlayer(pos_x, pos_y, sprite) {
-        return new Player(pos_x, pos_y, 1, 0, sprite);
+    static createPlayer(posX, posY, sprite) {
+        return new Player(posX, posY, 1, 0, sprite);
     }
 
-    allowControl(follow_mouse, objects) {
+    allowControl(followMouse, objects) {
         this.moveForwardsBackwards();
 
-        if (follow_mouse) {
+        if (followMouse) {
             this.lookAtMouse();
             this.moveLeftRight();
         } else {
@@ -21,13 +21,13 @@ class Player extends BaseCharacter {
     }
 
     moveForwardsBackwards(speed=50) {
-        let normalized_speed = map(speed, 0, 100, 0.1, 10)
+        let normalizedSpeed = map(speed, 0, 100, 0.1, 10)
         let displacement;
         // 87, 83 are 'W' and 'S' keys respectively.
         if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
-            displacement = this.dir.copy().mult(normalized_speed);
+            displacement = this.dir.copy().mult(normalizedSpeed);
         } else if ((keyIsDown(DOWN_ARROW) || keyIsDown(83))) {
-            displacement = this.dir.copy().mult(-1 * normalized_speed);
+            displacement = this.dir.copy().mult(-1 * normalizedSpeed);
         }
 
         if (displacement) {
@@ -36,13 +36,13 @@ class Player extends BaseCharacter {
     }
 
     moveLeftRight(speed=50) {
-        let normalized_speed = map(speed, 0, 100, 0.1, 10)
+        let normalizedSpeed = map(speed, 0, 100, 0.1, 10)
         let displacement;
         // 65, 68 are 'A' and 'D' keys respectively.
         if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-            displacement = this.dir.copy().rotate(radians(-90)).mult(normalized_speed);
+            displacement = this.dir.copy().rotate(radians(-90)).mult(normalizedSpeed);
         } else if ((keyIsDown(RIGHT_ARROW) || keyIsDown(68))) {
-            displacement = this.dir.copy().rotate(radians(90)).mult(normalized_speed);
+            displacement = this.dir.copy().rotate(radians(90)).mult(normalizedSpeed);
         }
 
         if (displacement) {
@@ -55,17 +55,17 @@ class Player extends BaseCharacter {
     }
 
     lookLeftRight(speed=10) {
-        let new_dir;
+        let newDir;
         // 65, 68 are 'A' and 'D' keys respectively.
         if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
-            new_dir = this.dir.copy().rotate(radians(-speed));
+            newDir = this.dir.copy().rotate(radians(-speed));
         } else if ((keyIsDown(RIGHT_ARROW) || keyIsDown(68))) {
-            new_dir = this.dir.copy().rotate(radians(speed));
+            newDir = this.dir.copy().rotate(radians(speed));
         }
 
-        if (new_dir) {
-            let new_look_at_pt = createVector(new_dir.x + this.pos.x, new_dir.y + this.pos.y)
-            this.lookAt(new_look_at_pt)
+        if (newDir) {
+            let newLookAtPt = createVector(newDir.x + this.pos.x, newDir.y + this.pos.y)
+            this.lookAt(newLookAtPt)
         }
     }
 

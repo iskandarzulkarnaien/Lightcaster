@@ -1,6 +1,6 @@
 class UnreflectiveGlass extends LineObject {
-    constructor(start_x, start_y, end_x, end_y) {
-        super(start_x, start_y, end_x, end_y);
+    constructor(startPointX, startPointY, endPointX, endPointY) {
+        super(startPointX, startPointY, endPointX, endPointY);
         super.addOpticalProperty('transparent')
     }
 
@@ -8,12 +8,12 @@ class UnreflectiveGlass extends LineObject {
         push();
             stroke(255, 200);
             strokeWeight(3);
-            line(this.start_point.x, this.start_point.y, this.end_point.x, this.end_point.y);
+            line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y);
         pop();
         push();
             stroke(0);
             strokeWeight(1.5);
-            line(this.start_point.x, this.start_point.y, this.end_point.x, this.end_point.y);
+            line(this.startPoint.x, this.startPoint.y, this.endPoint.x, this.endPoint.y);
         pop();
     }
 }

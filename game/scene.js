@@ -1,29 +1,29 @@
 // Objects requiring pre-loading
-let background_img;
-let player_sprite;
-let enemy_sprites;
+let backgroundSprite;
+let playerSprite;
+let enemySprites;
 
 // Other Objects
 let objects;
-let light_sources;
+let lightSources;
 let player;
-let follow_mouse;
+let followMouse;
 
 // Game Related Data
-let game_tick = 0;
+let gameTick = 0;
 
 // Main Functions Section
 function preload() {
     const NUM_ENEMIES = 9;
 
-    background_img = preload_background();
+    backgroundSprite = preloadBackground();
 
-    player_sprite = preload_player();
-    player_sprite.loadPixels();
+    playerSprite = preloadPlayer();
+    playerSprite.loadPixels();
 
-    enemy_sprites = preload_enemies(NUM_ENEMIES);
-    for (let enemy_sprite of enemy_sprites) {
-        enemy_sprite.loadPixels();
+    enemySprites = preloadEnemies(NUM_ENEMIES);
+    for (let enemySprite of enemySprites) {
+        enemySprite.loadPixels();
     }
 }
 
@@ -41,20 +41,20 @@ function setup() {
 
     createCanvas(CANVAS_LENGTH * 3/4, CANVAS_LENGTH * 3/4);
 
-    background_img.delay(BACKGROUND_ANIMATION_SPEED);
+    backgroundSprite.delay(BACKGROUND_ANIMATION_SPEED);
 
     objects = createObjects();
-    light_sources = createStationaryLightSources();
+    lightSources = createStationaryLightSources();
 
     // Place these into their own functions
-    player_sprite.resize(0, PLAYER_SIZE);
-    player = Player.createPlayer(width/2, height/2, player_sprite);
+    playerSprite.resize(0, PLAYER_SIZE);
+    player = Player.createPlayer(width/2, height/2, playerSprite);
     objects.push(player);
 
-    let bounding_offset = 100;
+    let boundingOffset = 100;
     for (let enemySprite of enemyShipSprites) {
-        let x = random(bounding_offset, width - bounding_offset);
-        let y = random(bounding_offset, height - bounding_offset);
+        let x = random(boundingOffset, width - boundingOffset);
+        let y = random(boundingOffset, height - boundingOffset);
 
         enemySprite.resize(0, ENEMY_SIZE);
         enemy = Enemy.createEnemy(x, y, enemySprite);
@@ -63,39 +63,39 @@ function setup() {
 }
 
 function draw() {
-    game_tick++;
-    if (game_tick % 60 == 0) {
-        console.log(`${game_tick / 60} seconds have elapsed`);
+    gameTick++;
+    if (gameTick % 60 == 0) {
+        console.log(`${gameTick / 60} seconds have elapsed`);
         console.log(`current framerate is: ${frameRate()}`);
     }
 
-    display_background();
+    displayBackground();
 
     drawAllObjects(objects);
-    // castAllStationaryLightSources(light_sources, objects);
+    // castAllStationaryLightSources(lightSources, objects);
 
-    player.allowControl(follow_mouse, objects);
+    player.allowControl(followMouse, objects);
     player.show();
 }
 
 // Helper Functions Section
 
 // Preload Function
-function preload_background(background_id=null) {
-    if (!background_id) {
-        background_id = Math.floor(random(1, 10));
+function preloadBackground(backgroundType=null) {
+    if (!backgroundType) {
+        backgroundType = Math.floor(random(1, 10));
     }
-    return loadImage(`assets/animated_backgrounds/space${background_id}_4-frames.gif`);
+    return loadImage(`assets/animated_backgrounds/space${backgroundType}_4-frames.gif`);
 }
 
-function preload_player(ship_id=2) {
-    if (!ship_id) {
-        ship_id = Math.floor(random(1, 7));
+function preloadPlayer(shipType=2) {
+    if (!shipType) {
+        shipType = Math.floor(random(1, 7));
     }
-    return loadImage(`assets/models/player/Ship${ship_id}.png`);
+    return loadImage(`assets/models/player/Ship${shipType}.png`);
 }
 
-function preload_enemies(numEnemies, enemyShipId=null) {
+function preloadEnemies(numEnemies, enemyShipId=null) {
     enemyShipSprites = [];
     if (!enemyShipId) {
         enemyShipId = Math.floor(random(1, 7));
@@ -107,8 +107,8 @@ function preload_enemies(numEnemies, enemyShipId=null) {
 }
 
 // Display Functions
-function display_background() {
-    background(background_img)
+function displayBackground() {
+    background(backgroundSprite)
 }
 
 function drawAllObjects(objects) {
@@ -123,33 +123,33 @@ function createObjects() {
     objects = [];
 
     // Bounding Box of Canvas
-    let boundary_top = new Boundary(0, 0, width, 0);
-    objects.push(boundary_top);
+    let boundaryTop = new Boundary(0, 0, width, 0);
+    objects.push(boundaryTop);
     
-    let boundary_right = new Boundary(width, 0, width, height);
-    objects.push(boundary_right);
+    let boundaryRight = new Boundary(width, 0, width, height);
+    objects.push(boundaryRight);
 
-    let boundary_bottom = new Boundary(0, height, width, height);
-    objects.push(boundary_bottom);
+    let boundaryBottom = new Boundary(0, height, width, height);
+    objects.push(boundaryBottom);
 
-    let boundary_left = new Boundary(0, 0, 0, height);
-    objects.push(boundary_left);
+    let boundaryLeft = new Boundary(0, 0, 0, height);
+    objects.push(boundaryLeft);
 
     // Other Surfaces
 
     for (let i = 0; i < 9; i++) {
-        let bounding_offset = 50;
-        let x1= random(bounding_offset, width - bounding_offset);
-        let y1 = random(bounding_offset, height - bounding_offset);
-        let x2 = random(bounding_offset, width - bounding_offset);
-        let y2 = random(bounding_offset, height - bounding_offset);
+        let boundingOffset = 50;
+        let x1= random(boundingOffset, width - boundingOffset);
+        let y1 = random(boundingOffset, height - boundingOffset);
+        let x2 = random(boundingOffset, width - boundingOffset);
+        let y2 = random(boundingOffset, height - boundingOffset);
         
-        let random_line = random([
+        let randomLine = random([
             (x1, y1, x2, y2) => new LineObject(x1, y1, x2, y2),
             (x1, y1, x2, y2) => new Mirror(x1, y1, x2, y2),
             (x1, y1, x2, y2) => new UnreflectiveGlass(x1, y1, x2, y2)
         ])(x1, y1, x2, y2);
-        objects.push(random_line);
+        objects.push(randomLine);
     }
 
     // let glass = new UnreflectiveGlass(width / 2, height / 2 + 50,
@@ -165,17 +165,17 @@ function createObjects() {
 
 // Light Related Functions
 function createStationaryLightSources() {
-    light_sources = [];
+    lightSources = [];
 
     // let ray = new Ray(width / 2, height / 2, 1, 0);
     // // ray.moveTo(mouseX, mouseY);
-    // light_sources.push(ray);
+    // lightSources.push(ray);
 
     // let torch = new LightSource(width / 2 - 100, height / 2 - 100, 1, 1, 30, 1);
     let torch = new LightSource(0, 0, 1, 1, 30, 1);
-    light_sources.push(torch);
+    lightSources.push(torch);
 
-    return light_sources;
+    return lightSources;
 }
 
 function castAllStationaryLightSources(sources, objects) {

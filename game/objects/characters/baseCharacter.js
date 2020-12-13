@@ -1,8 +1,8 @@
 class BaseCharacter extends BaseObject {
-    constructor(pos_x, pos_y, dir_x, dir_y, sprite, health) {
+    constructor(posX, posY, dirX, dirY, sprite, health) {
         super();
-        this.pos = createVector(pos_x, pos_y);
-        this.dir = createVector(dir_x, dir_y);
+        this.pos = createVector(posX, posY);
+        this.dir = createVector(dirX, dirY);
         this.dir.normalize();
         this.sprite = sprite;
         this.health = health;
@@ -21,9 +21,9 @@ class BaseCharacter extends BaseObject {
     }
 
     lookAt(point) {
-        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
-        new_dir.normalize();
-        this.dir = new_dir;
+        let newDir = createVector(point.x - this.pos.x, point.y - this.pos.y);
+        newDir.normalize();
+        this.dir = newDir;
     }
 
     receiveHit() {
@@ -32,7 +32,7 @@ class BaseCharacter extends BaseObject {
     }
 
     findHit(ray, epsilon) {
-        // TODO: Reimplement with Bounding Box
+        // TODO: Re-implement with Bounding Box
         // Approximates the ship as a line that starts from the tip to tail (It does not rotate with the ship)
         let tail = createVector(this.pos.x - this.sprite.width/2, this.pos.y);
         let tip = createVector(this.pos.x + this.sprite.width/2, this.pos.y);

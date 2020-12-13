@@ -5,14 +5,14 @@ class BaseObject {
     ALLOWED_OPTICAL_PROPERTIES = new Set(['reflective', 'transparent', 'translucent']);
 
     constructor() {
-        this.optical_properties = [];
+        this.opticalProperties = [];
     }
 
     addOpticalProperty(property) {
         if (!this.ALLOWED_OPTICAL_PROPERTIES.has(property)) {
             throw `Attempting to add forbidden property: ${property}`
         }
-        this.optical_properties.push(property)
+        this.opticalProperties.push(property)
     }
 
     addOpticalProperties(properties) {

@@ -5,109 +5,109 @@ class Ray {
     SHOW_RAY_POS = false;
     RAY_POS_SIZE = 8;
 
-    constructor(pos_x, pos_y, dir_x, dir_y, draw_function=null) {
-        this.pos = createVector(pos_x, pos_y);
-        this.dir = createVector(dir_x, dir_y);
+    constructor(posX, posY, dirX, dirY, drawFunction=null) {
+        this.pos = createVector(posX, posY);
+        this.dir = createVector(dirX, dirY);
         this.dir.normalize();
 
-        if (!draw_function) {
-            this.draw_function = (ray, hit_location)=> {
+        if (!drawFunction) {
+            this.drawFunction = (ray, hitLocation)=> {
                 push();
                     stroke(255, 100);
-                    line(ray.pos.x, ray.pos.y, hit_location.x, hit_location.y);
+                    line(ray.pos.x, ray.pos.y, hitLocation.x, hitLocation.y);
                 pop();
             };
         } else {
-            this.draw_function = draw_function
+            this.drawFunction = drawFunction;
         }
     }
 
     // Possible Candidates for sub-classing
     static createDefaultRay(pos, dir) {
-        const draw_function = (ray, hit_location)=> {
+        const drawFunction = (ray, hitLocation)=> {
             push();
                 stroke(255, 100);
-                line(ray.pos.x, ray.pos.y, hit_location.x, hit_location.y);
+                line(ray.pos.x, ray.pos.y, hitLocation.x, hitLocation.y);
             pop();
         };
-        return new Ray(pos.x, pos.y, dir.x, dir.y, draw_function)
+        return new Ray(pos.x, pos.y, dir.x, dir.y, drawFunction)
     }
 
     static createPlayerRay(player) {
-        const draw_function = (ray, hit_location) => {
+        const drawFunction = (ray, hitLocation) => {
             push();
                 stroke('red');
                 strokeWeight(3)
-                line(ray.pos.x, ray.pos.y, hit_location.x, hit_location.y);
+                line(ray.pos.x, ray.pos.y, hitLocation.x, hitLocation.y);
             pop();
         };
-        return new Ray(player.pos.x, player.pos.y, player.dir.x, player.dir.y, draw_function)
+        return new Ray(player.pos.x, player.pos.y, player.dir.x, player.dir.y, drawFunction)
     }
 
-    static createCustomRay(pos, dir, draw_function) {
-        return new Ray(pos.x, pos.y, dir.x, dir.y, draw_function)
+    static createCustomRay(pos, dir, drawFunction) {
+        return new Ray(pos.x, pos.y, dir.x, dir.y, drawFunction)
     }
 
     static copy(ray) {
-        return new Ray(ray.pos.x, ray.pos.y, ray.dir.x, ray.dir.y, ray.draw_function)
+        return new Ray(ray.pos.x, ray.pos.y, ray.dir.x, ray.dir.y, ray.drawFunction)
     }
 
-    cast(objects, reflect_level=this.MAXIMUM_REFLECT_LEVEL) {
-        let nearest_hit = null;
-        let hit_object = null;
-        let hit_distance = Infinity;
+    cast(objects, reflectLevel=this.MAXIMUM_REFLECT_LEVEL) {
+        let nearestHit = null;
+        let hitObject = null;
+        let hitDistance = Infinity;
         for (let object of objects) {
-            const hit_point = object.findHit(this, this.EPSILON);
-            if (hit_point) {
-                const distance = p5.Vector.dist(this.pos, hit_point);
-                if (distance < hit_distance) {
-                    nearest_hit = hit_point;
-                    hit_object = object;
-                    hit_distance = distance;
+            const hitPoint = object.findHit(this, this.EPSILON);
+            if (hitPoint) {
+                const distance = p5.Vector.dist(this.pos, hitPoint);
+                if (distance < hitDistance) {
+                    nearestHit = hitPoint;
+                    hitObject = object;
+                    hitDistance = distance;
                 }
             }
         }
-        if (nearest_hit) {
-            this.drawRay(nearest_hit);
-            hit_object.receiveHit();
+        if (nearestHit) {
+            this.drawRay(nearestHit);
+            hitObject.receiveHit();
 
-            if (hit_object.optical_properties.includes('reflective') && reflect_level > 0) {
-                this.handleReflective(nearest_hit, hit_object, reflect_level);
+            if (hitObject.opticalProperties.includes('reflective') && reflectLevel > 0) {
+                this.handleReflective(nearestHit, hitObject, reflectLevel);
             }
 
-            if (hit_object.optical_properties.includes('transparent')) {
-                this.handleTransparent(nearest_hit);
+            if (hitObject.opticalProperties.includes('transparent')) {
+                this.handleTransparent(nearestHit);
             }
 
-            if (hit_object.optical_properties.includes('translucent')) {
-                this.handleTranslucent(nearest_hit);
+            if (hitObject.opticalProperties.includes('translucent')) {
+                this.handleTranslucent(nearestHit);
             }
         }
     }
 
-    handleReflective(nearest_hit, hit_object, reflect_level) {
-        let reflected_dir = this.dir.copy().reflect(hit_object.normal)
+    handleReflective(nearestHit, hitObject, reflectLevel) {
+        let reflectedDir = this.dir.copy().reflect(hitObject.normal)
 
-        let reflected_ray = Ray.copy(this);
-        reflected_ray.moveTo(nearest_hit);
-        reflected_ray.changeDir(reflected_dir)
-        reflected_ray.cast(objects, reflect_level - 1)
+        let reflectedRay = Ray.copy(this);
+        reflectedRay.moveTo(nearestHit);
+        reflectedRay.changeDir(reflectedDir)
+        reflectedRay.cast(objects, reflectLevel - 1)
     }
 
-    handleTransparent(nearest_hit) {
-        let penetrating_ray = Ray.copy(this);
-        penetrating_ray.moveTo(nearest_hit);
-        penetrating_ray.cast(objects);
+    handleTransparent(nearestHit) {
+        let penetratingRay = Ray.copy(this);
+        penetratingRay.moveTo(nearestHit);
+        penetratingRay.cast(objects);
     }
 
-    handleTranslucent(nearest_hit) {
+    handleTranslucent(nearestHit) {
         // TODO: Perform some attenuation of ray brightness
-        // let penetrating_ray = new Ray(nearest_hit.x, nearest_hit.y, this.dir.x, this.dir.y);
-        // penetrating_ray.cast(objects)
+        // let penetratingRay = new Ray(nearestHit.x, nearestHit.y, this.dir.x, this.dir.y);
+        // penetratingRay.cast(objects)
     }
 
-    drawRay(hit_location) {
-        this.draw_function(this, hit_location);
+    drawRay(hitLocation) {
+        this.drawFunction(this, hitLocation);
     }
 
     moveTo(point) {
@@ -115,9 +115,9 @@ class Ray {
     }
 
     lookAt(point) {
-        let new_dir = createVector(point.x - this.pos.x, point.y - this.pos.y);
-        new_dir.normalize();
-        this.dir = new_dir;
+        let newDir = createVector(point.x - this.pos.x, point.y - this.pos.y);
+        newDir.normalize();
+        this.dir = newDir;
     }
 
     changeDir(direction) {

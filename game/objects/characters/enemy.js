@@ -1,9 +1,9 @@
 class Enemy extends BaseCharacter {
-    constructor(pos_x, pos_y, dir_x=1, dir_y=0, sprite, health=10) {
-        super(pos_x, pos_y, dir_x, dir_y, sprite, health)
+    constructor(posX, posY, dirX=1, dirY=0, sprite, health=10) {
+        super(posX, posY, dirX, dirY, sprite, health)
     }
 
-    static createEnemy(pos_x, pos_y, sprite) {
-        return new Enemy(pos_x, pos_y, 1, 0, sprite);
+    static createEnemy(posX, posY, sprite) {
+        return new Enemy(posX, posY, 1, 0, sprite);
     }
 }
