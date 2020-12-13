@@ -38,14 +38,7 @@ class BaseCharacter extends BaseObject {
         let tip = createVector(this.pos.x + this.sprite.width/2, this.pos.y);
 
         let line = new LineObject(tail.x, tail.y, tip.x, tip.y);
-        let intersection_point = line.findHit(ray, epsilon);
-
-        if (intersection_point) {
-            this.receiveHit();
-            return intersection_point;
-        } else {
-            return;
-        }
+        return line.findHit(ray, epsilon);
     }
 
     show() {
