@@ -48,7 +48,7 @@ class Ray {
         const drawFunction = (ray, hitLocation) => {
             push();
                 stroke('green');
-                strokeWeight(3)
+                strokeWeight(2)
                 line(ray.pos.x, ray.pos.y, hitLocation.x, hitLocation.y);
             pop();
         };

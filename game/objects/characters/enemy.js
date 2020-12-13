@@ -25,7 +25,8 @@ class Enemy extends BaseCharacter {
     }
 
     huntPlayerAction(player) {
-        if (this.actionTick < 120) {
+        if (this.actionTick < 60 * 3) {
+            this.fireForwards();
             return;
         }
         // let isPlayerFound = this.findPlayer(player);
@@ -42,6 +43,10 @@ class Enemy extends BaseCharacter {
 
     fireAt(point) {
         this.lookAt(point);
+        this.fireForwards();
+    }
+
+    fireForwards() {
         let laser = Ray.createEnemyRay(this);
         laser.cast(objects);
     }
