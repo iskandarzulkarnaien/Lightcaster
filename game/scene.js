@@ -79,7 +79,7 @@ function draw() {
 
     // TODO: Change to player.executeBehavior. It is left to allowControl for now as the player
     // dying makes it very difficult to test
-    player.allowControl(followMouse, objects);
+    player.allowControl(followMouse=true, objects);
 
     for (let enemy of enemies) {
         enemy.executeBehaviour(player);
