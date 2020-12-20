@@ -1,7 +1,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lightcaster</title>
   <style>
     body {
       padding: 0;
@@ -36,19 +35,14 @@
 
 </head>
 
-# Welcome to Lightcaster
+# Welcome to Lightcaster!
 Lightcaster is a work-in-progress game created by [Iskandar Zulkarnaien](https://github.com/iskandarzulkarnaien) (thats me!).
-It is my first game development project, and is built using the [p5.js](https://p5js.org) library. 
-At its core, Lightcaster is a game about light and optics and aims to invoke in its players the same
-sense of wonder and curiosity I had about Physics when I was growing up.
 
-Lightcaster is heavily inspired by Daniel Shiffman's (AKA: 'The Coding Train' on YouTube)
-[video](https://www.youtube.com/watch?v=TOEi6T2mtHo) on Raycasting, which I found to be totally cool
-and gave me the idea of creating a game based on rays and reflections.
+Use the power of lazers and reflections to get rid of the pesky enemy ships trying to shoot you down!
 
-The game controls can be found further down below.
+The game's controls can be found further down below.
 
-If you have any questions or spot any bugs, feel free to file a bug report [here](https://github.com/iskandarzulkarnaien/Lightcaster/issues)
+If you have any questions and suggestions, or spot any bugs, feel free to let me know [here](https://github.com/iskandarzulkarnaien/Lightcaster/issues).
 
 <body>
   <main>
